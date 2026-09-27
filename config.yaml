@@ -1,0 +1,10 @@
+app:
+  name: Orbit Checkout
+  debug: true
+  product:
+    name: Orbit Pro Headphones
+    price_cents: 14900
+    description: Wireless over-ear headphones with active noise cancellation and 40-hour battery life.
+payment:
+  currency: usd
+  success_url: /orders/
