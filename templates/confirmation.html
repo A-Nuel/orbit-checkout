@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Order #{{ order.id }} — Orbit Checkout{% endblock %}
+
+{% block content %}
+<section class="confirmation">
+  <div class="card">
+    {% if order.status == 'paid' %}
+    <div class="status-badge status-success">Payment successful</div>
+    <h1>Thanks for your order!</h1>
+    {% elif order.status == 'failed' %}
+    <div class="status-badge status-failed">Payment failed</div>
+    <h1>Order not completed</h1>
+    {% else %}
+    <div class="status-badge status-pending">Pending</div>
+    <h1>Order received</h1>
+    {% endif %}
+
+    <div class="order-summary">
+      <div class="row">
+        <span class="label">Order number</span>
+        <span class="value">#{{ order.id }}</span>
+      </div>
+      <div class="row">
+        <span class="label">Product</span>
+        <span class="value">{{ order.product_name }}</span>
+      </div>
+      <div class="row">
+        <span class="label">Amount</span>
+        <span class="value">${{ '%.2f' % (order.amount_cents / 100) }} {{ order.currency|upper }}</span>
+      </div>
+      <div class="row">
+        <span class="label">Email</span>
+        <span class="value">{{ order.customer_email }}</span>
+      </div>
+      <div class="row">
+        <span class="label">Status</span>
+        <span class="value">{{ order.status }}</span>
+      </div>
+      {% if order.stripe_charge_id %}
+      <div class="row">
+        <span class="label">Charge ID</span>
+        <span class="value mono">{{ order.stripe_charge_id }}</span>
+      </div>
+      {% endif %}
+      <div class="row">
+        <span class="label">Placed at</span>
+        <span class="value">{{ order.created_at }}</span>
+      </div>
+    </div>
+
+    <a href="/" class="btn btn-secondary">Back to product</a>
+  </div>
+</section>
+{% endblock %}

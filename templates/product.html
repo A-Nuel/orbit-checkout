@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} — Orbit Checkout{% endblock %}
+
+{% block content %}
+<section class="product-hero">
+  <div class="product-image">
+    <div class="headphones-placeholder">
+      <span class="headphones-icon">🎧</span>
+    </div>
+  </div>
+  <div class="product-details">
+    <h1>{{ product.name }}</h1>
+    <p class="price">${{ '%.2f' % (product.price_cents / 100) }}</p>
+    <p class="description">{{ product.description }}</p>
+
+    {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" action="/checkout" class="checkout-form" id="checkout-form">
+      <div class="form-group">
+        <label for="name">Full name</label>
+        <input type="text" id="name" name="name" placeholder="Alex Rivera" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+      </div>
+      <div class="form-group">
+        <label for="card_token">Card (demo tokens)</label>
+        <select id="card_token" name="card_token">
+          <option value="tok_visa">Visa (success)</option>
+          <option value="tok_mastercard">Mastercard (success)</option>
+          <option value="tok_chargeDeclined">Declined card</option>
+          <option value="tok_insufficient_funds">Insufficient funds</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary" id="pay-btn">
+        Pay ${{ '%.2f' % (product.price_cents / 100) }}
+      </button>
+    </form>
+    <p class="hint">This is a demo. No real payment processor is contacted.</p>
+  </div>
+</section>
+
+<script>
+  document.getElementById('checkout-form').addEventListener('submit', function () {
+    var btn = document.getElementById('pay-btn');
+    btn.disabled = true;
+    btn.textContent = 'Processing…';
+  });
+</script>
+{% endblock %}
